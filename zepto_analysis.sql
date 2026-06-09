@@ -74,8 +74,9 @@ ORDER BY duplicate_count DESC, category, name;
 DELETE FROM zepto
 WHERE COALESCE(mrp, 0) = 0;
 
--- Convert pricing values from paise to rupees
--- (Run once only; skip if prices are already in rupees)
+-- Convert pricing values from paise to rupees.
+-- Threshold note: values > 1000 are treated as likely paise-era imports.
+-- If your source already stores rupees (including premium items > ₹1000), skip this update.
 UPDATE zepto
 SET
     mrp = ROUND(mrp / 100.0, 2),
@@ -83,7 +84,11 @@ SET
 WHERE mrp > 1000 OR discountedSellingPrice > 1000;
 
 -- Validate discountedSellingPrice <= MRP after conversion
-SELECT *
+SELECT
+    sku_id,
+    name,
+    mrp,
+    discountedSellingPrice
 FROM zepto
 WHERE discountedSellingPrice > mrp;
 
