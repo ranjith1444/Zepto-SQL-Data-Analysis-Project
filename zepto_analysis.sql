@@ -79,13 +79,14 @@ WHERE mrp IS NULL OR mrp = 0;
 -- Convert pricing values from paise to rupees.
 -- Recommended: first inspect min/max values of mrp and discountedSellingPrice to confirm unit scale.
 -- Threshold note: values > 1000 are treated as likely paisa-era imports.
+-- Row-level assumption: mrp and discountedSellingPrice are expected to use the same unit.
 -- If your source already stores rupees (including premium items > ₹1000), skip this update.
 -- Conversion threshold for paisa detection: 1000.
 UPDATE zepto
 SET
-    mrp = CASE WHEN mrp > 1000 THEN ROUND(mrp / 100.0, 2) ELSE mrp END,
+    mrp = CASE WHEN mrp > 1000 OR discountedSellingPrice > 1000 THEN ROUND(mrp / 100.0, 2) ELSE mrp END,
     discountedSellingPrice = CASE
-        WHEN discountedSellingPrice > 1000 THEN ROUND(discountedSellingPrice / 100.0, 2)
+        WHEN mrp > 1000 OR discountedSellingPrice > 1000 THEN ROUND(discountedSellingPrice / 100.0, 2)
         ELSE discountedSellingPrice
     END
 WHERE mrp > 1000 OR discountedSellingPrice > 1000;
