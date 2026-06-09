@@ -76,9 +76,9 @@ DELETE FROM zepto
 WHERE mrp IS NULL OR mrp = 0;
 
 -- Convert pricing values from paise to rupees.
--- Threshold note: values > 1000 are treated as likely paise-era imports.
+-- Threshold note: values > 1000 are treated as likely paisa-era imports.
 -- If your source already stores rupees (including premium items > ₹1000), skip this update.
--- Conversion threshold for paise detection: 1000.
+-- Conversion threshold for paisa detection: 1000.
 UPDATE zepto
 SET
     mrp = ROUND(mrp / 100.0, 2),
@@ -160,7 +160,7 @@ SELECT
     name,
     discountedSellingPrice,
     weightInGms,
-    ROUND(discountedSellingPrice / NULLIF(weightInGms, 0), 4) AS price_per_gram
+    ROUND(discountedSellingPrice / weightInGms, 4) AS price_per_gram
 FROM zepto
 WHERE weightInGms IS NOT NULL
   AND weightInGms > 0

@@ -159,4 +159,4 @@ Calculated total inventory weight across categories.
 
 Ranjith
 
-GitHub: https://github.com/ranjith1444
+GitHub: [ranjith1444](https://github.com/ranjith1444)
