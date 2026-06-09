@@ -1,5 +1,6 @@
 -- Zepto SQL Data Analysis Project
 -- PostgreSQL script for schema setup, cleaning, EDA, and business insights
+-- Business rule used in Q2 and Q4: premium products are defined as MRP >= ₹500.
 
 -- =========================================================
 -- 1) DATABASE SCHEMA
@@ -17,7 +18,7 @@ CREATE TABLE zepto (
     discountedSellingPrice NUMERIC(8,2),
     weightInGms INTEGER,
     outOfStock BOOLEAN,
-    quantity INTEGER -- additional dataset quantity field (kept separate from stock count; not used in current analysis queries)
+    quantity INTEGER -- supplier-listed quantity/pack metadata (kept separate from available stock count)
 );
 
 -- =========================================================
@@ -76,6 +77,7 @@ DELETE FROM zepto
 WHERE mrp IS NULL OR mrp = 0;
 
 -- Convert pricing values from paise to rupees.
+-- Recommended: first inspect min/max values of mrp and discountedSellingPrice to confirm unit scale.
 -- Threshold note: values > 1000 are treated as likely paisa-era imports.
 -- If your source already stores rupees (including premium items > ₹1000), skip this update.
 -- Conversion threshold for paisa detection: 1000.
