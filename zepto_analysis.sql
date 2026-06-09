@@ -8,15 +8,16 @@ DROP TABLE IF EXISTS zepto;
 
 CREATE TABLE zepto (
     sku_id SERIAL PRIMARY KEY,
+    -- Column names intentionally mirror source dataset headers.
     category VARCHAR(120),
     name VARCHAR(150) NOT NULL,
     mrp NUMERIC(8,2),
     discountPercent NUMERIC(5,2),
-    availableQuantity INTEGER,
+    availableQuantity INTEGER, -- current stock units available
     discountedSellingPrice NUMERIC(8,2),
     weightInGms INTEGER,
     outOfStock BOOLEAN,
-    quantity INTEGER
+    quantity INTEGER -- additional dataset quantity field (kept separately from stock count)
 );
 
 -- =========================================================
