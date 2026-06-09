@@ -142,7 +142,6 @@ SELECT
     ROUND(AVG(discountPercent), 2) AS avg_discount_percent
 FROM zepto
 GROUP BY category
-HAVING COUNT(*) > 0
 ORDER BY avg_discount_percent DESC NULLS LAST
 LIMIT 10;
 

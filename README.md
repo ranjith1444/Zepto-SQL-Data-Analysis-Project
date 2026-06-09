@@ -41,8 +41,8 @@ The dataset contains product inventory information such as:
 
 ## 🗂️ Files in This Repository
 
-- `/tmp/workspace/ranjith1444/Zepto-SQL-Data-Analysis-Project/README.md` – Project documentation
-- `/tmp/workspace/ranjith1444/Zepto-SQL-Data-Analysis-Project/zepto_analysis.sql` – Complete SQL workflow (schema, cleaning, EDA, business queries)
+- `README.md` – Project documentation
+- `zepto_analysis.sql` – Complete SQL workflow (schema, cleaning, EDA, business queries)
 
 ---
 
@@ -140,7 +140,7 @@ Calculated total inventory weight across categories.
 
 1. Create a PostgreSQL database.
 2. Import the CSV into a staging table or directly into `zepto`.
-3. Execute `/tmp/workspace/ranjith1444/Zepto-SQL-Data-Analysis-Project/zepto_analysis.sql` in pgAdmin or psql.
+3. Execute `zepto_analysis.sql` in pgAdmin or psql.
 4. Review output result sets for exploration and business insights.
 
 ---
