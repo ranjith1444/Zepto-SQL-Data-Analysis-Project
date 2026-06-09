@@ -17,7 +17,7 @@ CREATE TABLE zepto (
     discountedSellingPrice NUMERIC(8,2),
     weightInGms INTEGER,
     outOfStock BOOLEAN,
-    quantity INTEGER -- additional dataset quantity field (kept separately from stock count)
+    quantity INTEGER -- additional dataset quantity field (kept separate from stock count; not used in current analysis queries)
 );
 
 -- =========================================================
@@ -81,8 +81,11 @@ WHERE mrp IS NULL OR mrp = 0;
 -- Conversion threshold for paisa detection: 1000.
 UPDATE zepto
 SET
-    mrp = ROUND(mrp / 100.0, 2),
-    discountedSellingPrice = ROUND(discountedSellingPrice / 100.0, 2)
+    mrp = CASE WHEN mrp > 1000 THEN ROUND(mrp / 100.0, 2) ELSE mrp END,
+    discountedSellingPrice = CASE
+        WHEN discountedSellingPrice > 1000 THEN ROUND(discountedSellingPrice / 100.0, 2)
+        ELSE discountedSellingPrice
+    END
 WHERE mrp > 1000 OR discountedSellingPrice > 1000;
 
 -- Validate discountedSellingPrice <= MRP after conversion
@@ -160,7 +163,7 @@ SELECT
     name,
     discountedSellingPrice,
     weightInGms,
-    ROUND(discountedSellingPrice / weightInGms, 4) AS price_per_gram
+    ROUND(discountedSellingPrice / NULLIF(weightInGms, 0), 4) AS price_per_gram
 FROM zepto
 WHERE weightInGms IS NOT NULL
   AND weightInGms > 0
