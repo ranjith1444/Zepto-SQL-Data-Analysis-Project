@@ -73,11 +73,12 @@ ORDER BY duplicate_count DESC, category, name;
 
 -- Remove invalid products where MRP is 0 or null
 DELETE FROM zepto
-WHERE COALESCE(mrp, 0) = 0;
+WHERE mrp IS NULL OR mrp = 0;
 
 -- Convert pricing values from paise to rupees.
 -- Threshold note: values > 1000 are treated as likely paise-era imports.
 -- If your source already stores rupees (including premium items > ₹1000), skip this update.
+-- Conversion threshold for paise detection: 1000.
 UPDATE zepto
 SET
     mrp = ROUND(mrp / 100.0, 2),
@@ -110,6 +111,7 @@ ORDER BY discountPercent DESC NULLS LAST
 LIMIT 10;
 
 -- Q2. High MRP Products Currently Out of Stock
+-- Business definition: premium products have MRP >= ₹500.
 SELECT
     sku_id,
     category,
@@ -138,7 +140,7 @@ SELECT
     discountPercent,
     discountedSellingPrice
 FROM zepto
-WHERE mrp > 500
+WHERE mrp >= 500
   AND COALESCE(discountPercent, 0) < 10
 ORDER BY mrp DESC;
 
